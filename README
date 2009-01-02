@@ -55,7 +55,7 @@ Please note the model name needs to be specified in lowercase.
 5. To create a link to display a form you can use the Standard REST Path 
    method used for the show action passing the name of the form definition file
    as a parameter, for example
-    link_to('Complete Test Smerf Form', smerf_url('testsmerf'))
+    link_to('Complete Test Smerf Form', smerf_form_url('testsmerf'))
 
 == Testing your installation
 
@@ -136,7 +136,7 @@ To create a link to display a form you can use the Standard REST Path
 method used for the show action passing the name of the form definition file
 as a parameter, for example
 
-link_to('Complete Test Smerf Form', smerf_url('testsmerf'))
+link_to('Complete Test Smerf Form', smerf_form_url('testsmerf'))
 
 === Defining the Form
 
