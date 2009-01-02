@@ -1,3 +1,21 @@
+== Version 0.1.1
+Move repository to GitHub
+
+Bug Fixes.
+
+* It appears that making changes directly to the view_paths array has been deprecated in 
+  Rails 2.1 onward and #append_view_path or #prepend_view_path should be used instead. 
+  Template for smerf_init.rb changed to use append_view_path.
+* Dependencies is deprecated from Rails 2.2 onward and ActiveSupport::Dependencies should 
+  be used instead. Template for smerf_init.rb changed to use ActiveSupport::Dependencies.
+
+Enhancements.
+
+* Added the ability for the generator to skip migrations by adding the --skip-migration
+  option. To re-run the generator without creating the migration you can do something 
+  like this:
+     ./script/generate smerf user --skip-migration  
+
 == Version 0.1.0
 Bug Fixes.
 

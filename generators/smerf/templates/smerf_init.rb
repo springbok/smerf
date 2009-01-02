@@ -5,7 +5,7 @@ model_path = ''
 %w(controllers helpers models views).each do |code_dir|
   file_path = File.join(directory, 'app', code_dir)
   $LOAD_PATH << file_path
-  Dependencies.load_paths << file_path
+  ActiveSupport::Dependencies.load_paths << file_path
   # Tell Rails where to look for out plugin's controller files
   config.controller_paths << file_path if file_path.include?('controllers')
   # By default Rails uses a template_root of RAILS_ROOT/app/views, the plugin
@@ -13,7 +13,7 @@ model_path = ''
   # be found. I also had to do this to allow the application layout to be used, without
   # this no layout would be used at all. We place the plugin view directory at the end
   # of the array so that the application view will be checked first.
-  ActionController::Base.view_paths << file_path if file_path.include?('views')
+  ActionController::Base.append_view_path file_path if file_path.include?('views')
   model_path = file_path if file_path.include?('models') 
 end
 

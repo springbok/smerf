@@ -1,4 +1,6 @@
 class SmerfGenerator < Rails::Generator::NamedBase
+  default_options :skip_migration => false
+  
   attr_accessor :plugin_path
   attr_accessor :user_model_name, :user_table_name, :user_table_fk_name 
   attr_accessor :link_table_name, :link_table_fk_name, :link_table_model_name,
@@ -29,7 +31,7 @@ class SmerfGenerator < Rails::Generator::NamedBase
       
       # Migrations
       m.migration_template("migrate/create_smerfs.rb", 
-        "db/migrate", {:migration_file_name => 'create_smerfs'})
+        "db/migrate", {:migration_file_name => 'create_smerfs'}) unless options[:skip_migration]
 
       # Routes
       m.route_resources(:smerf_forms)
@@ -68,6 +70,13 @@ class SmerfGenerator < Rails::Generator::NamedBase
     # Custom banner
     def banner
       "Usage: #{$0} smerf UserModelName"
+    end
+    
+    def add_options!(opt)
+      opt.separator ''
+      opt.separator 'Options:'
+      opt.on("--skip-migration", 
+             "Don't generate a migration files") { |v| options[:skip_migration] = v }
     end
 
 end
