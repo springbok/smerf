@@ -265,5 +265,14 @@ class SmerfItem
       remove_instance_variable(:@unique_code_check)       
       remove_instance_variable(:@fields)
     end
+
+    protected
+
+    # Store codes as a string, if we don't then numeric codes
+    # will have problems as we do comparisons with responsed pulled
+    # directly from the http request where all codes are strings.
+    def code_to_s
+      @code = @code.to_s
+    end
     
 end

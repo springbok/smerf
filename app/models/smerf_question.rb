@@ -69,7 +69,7 @@ class SmerfQuestion < SmerfItem
     super(parent_id, sort_order_field)
     
     @fields = {
-      'code'                        => {'mandatory' => 'Y'},
+      'code'                        => {'mandatory' => 'Y', 'field_method' => 'code_to_s'},
       'type'                        => {'mandatory' => 'Y', 'field_method' => 'check_question_type'},
       'question'                    => {'mandatory' => 'N'},
       'sort_order'                  => {'mandatory' => 'Y'},

@@ -33,7 +33,7 @@ class SmerfGroup < SmerfItem
 
     # Define group fields
     @fields = {
-      'code'                      => {'mandatory' => 'Y'},
+      'code'                      => {'mandatory' => 'Y', 'field_method' => 'code_to_s'},
       'name'                      => {'mandatory' => 'Y'},
       'questions'                 => {'mandatory' => 'Y', 'child_items' => 'SmerfQuestion', 'sort_by' => 'sort_order'},
       'description'               => {'mandatory' => 'N'}
