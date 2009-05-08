@@ -58,7 +58,27 @@ module SmerfSystemHelpers
     # Retrieve the owner object of the answer
     question_object = smerf_get_owner_object(answer_object, form)
 
-    # 1. Make sure that the answer that relates to this subsequestion 
+    # 1. Make sure that if an answer that has a subquestion is answered that
+    # the subquestion has an answer, e.g.
+    #
+    # Select your skills
+    # Banker
+    # Builder
+    # ...
+    # Other
+    #    Please specify
+    # We want to make sure that if 'Other' was selected the 'Please specify'
+    # subquestion has an answer
+    #
+    # Check if the answer this subquestion relates to has been answered
+    if (smerf_question_has_answer?(question_object, responses, answer_code))
+      # Make sure the subquestion has been answered
+      if (!smerf_question_answered?(question, responses))
+        return "'#{answer_object.answer}' needs additional information"
+      end
+    end
+
+    # 2. Make sure that the answer that relates to this subsequestion
     # has the correct response, e.g.
     # Select your skills
     # Banker
@@ -73,28 +93,17 @@ module SmerfSystemHelpers
     if (smerf_question_answered?(question, responses))
       # Check if the correct answer selected
       if (!smerf_question_has_answer?(question_object, responses, answer_code))
-        return "'#{answer_object.answer}' needs to be selected"
+        # Check if a different answer provided, if so clear subquestion answer
+        # and notify user. This allows a subquestion to be cleared if the user
+        # decided they want to select a non-subquestion answer.
+        if (smerf_question_answered?(question_object, responses) && question.type == 'singlechoice')
+          # Clear subquetion answers
+          responses.delete(question.code)
+          return "Ambiguous answer provided for question '#{question_object.question.strip}', the answers to this question has been cleared"
+        else
+          return "'#{answer_object.answer}' needs to be selected"
+        end
       end  
-    end
-    
-    # 2. Make sure that if an answer that has a subquestion is answered that
-    # the subquestion has an answer, e.g.
-    #
-    # Select your skills
-    # Banker
-    # Builder
-    # ...
-    # Other
-    #    Please specify
-    # We want to make sure that if 'Other' was selected the 'Please specify'
-    # subquestion has an answer
-    # 
-    # Check if the answer this subquestion relates to has been answered
-    if (smerf_question_has_answer?(question_object, responses, answer_code))
-      # Make sure the subquestion has been answered
-      if (!smerf_question_answered?(question, responses))
-        return "'#{answer_object.answer}' needs additional information"
-      end        
     end
     
     return nil
