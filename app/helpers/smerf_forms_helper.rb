@@ -318,7 +318,7 @@ module SmerfFormsHelper
         
       # Note the additional [] in the select_tag name, without this we only get 
       # one choice in params, adding the [] gets all choices as an array
-      html = "\n" + select_tag("responses[#{question.code}][]", answers, :multiple => 
+      html = "\n" + select_tag("responses[#{question.code}][]", raw(answers), :multiple => 
         # Check if multiple choice
         (question.selectionbox_multiplechoice and 
         !question.selectionbox_multiplechoice.blank?() and
