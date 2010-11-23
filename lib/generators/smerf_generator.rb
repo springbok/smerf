@@ -38,7 +38,7 @@ class SmerfGenerator < Rails::Generators::NamedBase
   end
   
   def create_routes
-    route "resources :smerf_form"
+    route "resources :smerf_forms"
   end
   
   def create_smerf_directory_and_test_form
