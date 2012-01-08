@@ -143,7 +143,7 @@ class SmerfItem
         # code and assign it to @code which is the instance variable for code.
         if (rc == true and !@data.blank?() and @data.has_key?(field) and !@data[field].blank?)
           instance_variable_set("@#{field}", @data[field])
-          
+          logger.info "*** @#{field}:: #{@data[field]}"
           # Check if a method has been defined for this field, if so call it now
           if (options.has_key?('field_method') and !options['field_method'].blank? and
             self.respond_to?(options['field_method']))
