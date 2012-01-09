@@ -25,9 +25,9 @@ module SmerfFormsHelper
         end
       end
       content_tag(:div,
-        content_tag(:h2, header_message) <<
+        content_tag(:h2, raw(header_message)) <<
           content_tag(:p, 'There were problems with the following questions:') <<
-          content_tag(:ul, error_messages),
+          content_tag(:ul, raw(error_messages)),
         :class => "smerfFormError")
     else
       ''
@@ -52,7 +52,7 @@ module SmerfFormsHelper
   #
   def smerf_title
     if !@smerfform.form.name.blank?
-      content_tag(:h2, @smerfform.form.name)
+      content_tag(:h2, raw(@smerfform.form.name))
     end
   end
   
@@ -62,7 +62,7 @@ module SmerfFormsHelper
   #
   def smerf_welcome
     if !@smerfform.form.welcome.blank?
-      content_tag(:div, content_tag(:p, @smerfform.form.welcome), :class => "smerfWelcome")
+      content_tag(:div, content_tag(:p, raw(@smerfform.form.welcome)), :class => "smerfWelcome")
     end
   end
   
@@ -72,7 +72,7 @@ module SmerfFormsHelper
   #
   def smerf_thank_you
     if !@smerfform.form.thank_you.blank?
-      content_tag(:div, content_tag(:p, @smerfform.form.thank_you), :class => "smerfThankyou")
+      content_tag(:div, content_tag(:p, raw(@smerfform.form.thank_you)), :class => "smerfThankyou")
     end
   end
   
@@ -83,7 +83,7 @@ module SmerfFormsHelper
   #
   def smerf_group_name(group)
     if !group.name.blank?
-      content_tag(:div, content_tag(:h3, group.name), :class => "smerfGroup")
+      content_tag(:div, content_tag(:h3, raw(group.name)), :class => "smerfGroup")
     end
   end
    
@@ -94,7 +94,7 @@ module SmerfFormsHelper
   #
   def smerf_group_description(group)
     if !group.description.blank?
-      content_tag(:div, content_tag(:p, group.description), :class => "smerfGroupDescription")
+      content_tag(:div, content_tag(:p, raw(group.description)), :class => "smerfGroupDescription")
     end
   end
  
@@ -134,19 +134,19 @@ module SmerfFormsHelper
   def smerf_group_question(question, level = 1)
     contents = ""
     # Format question header 
-    contents += content_tag(:div, content_tag(:p, question.header), 
-      :class => "smerfQuestionHeader") if (question.header and !question.header.blank?) 
+    contents += content_tag(:div, content_tag(:p, raw(question.header)), 
+      {:class => "smerfQuestionHeader"}, false) if (question.header and !question.header.blank?) 
     # Format question  
-    contents += content_tag(:div, content_tag(:p, question.question), 
-      :class => (level <= 1) ? "smerfQuestion" : "smerfSubquestion") if (question.question and !question.question.blank?) 
+    contents += content_tag(:div, content_tag(:p, raw(question.question)), 
+      {:class => (level <= 1) ? "smerfQuestion" : "smerfSubquestion"}, false) if (question.question and !question.question.blank?) 
     # Format error
     contents += content_tag(:div, 
-      content_tag(:p, "#{image_tag("smerf_error.gif", :alt => "Error")} #{@errors["#{question.item_id}"]["msg"]}"), 
-      :class => "smerfQuestionError") if (@errors and @errors.has_key?("#{question.item_id}"))    
+      content_tag(:p, raw("#{image_tag("smerf_error.gif", :alt => "Error")} #{@errors["#{question.item_id}"]["msg"]}")), 
+      {:class => "smerfQuestionError"}, false) if (@errors and @errors.has_key?("#{question.item_id}"))    
     # Format help   
     contents += content_tag(:div, 
-      content_tag(:p, "#{image_tag("smerf_help.gif", :alt => "Help")} #{question.help}"), 
-      :class => "smerfInstruction") if (!question.help.blank?)    
+      content_tag(:p, raw("#{image_tag("smerf_help.gif", :alt => "Help")} #{question.help}")), 
+      {:class => "smerfInstruction"}, false) if (!question.help.blank?)    
    
     # Check the type and format appropriatly
     case question.type
@@ -165,7 +165,7 @@ module SmerfFormsHelper
     end
     # Draw a line to indicate the end of the question if level 1, 
     # i.e. not an answer sub question
-    contents += content_tag(:div, "", :class => "questionbox") if (!contents.blank? and level <= 1)
+    contents += content_tag(:div, "", {:class => "questionbox"}, false) if (!contents.blank? and level <= 1)
     return contents   
   end
   
@@ -211,7 +211,7 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, content_tag(:p, html), :class => "checkbox")
+        contents += content_tag(:div, content_tag(:p, raw(html)), :class => "checkbox")
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end
@@ -238,7 +238,7 @@ module SmerfFormsHelper
           nil
         end,
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5")
-      contents = content_tag(:div, content_tag(:p, contents), :class => "textarea")
+      contents = content_tag(:div, content_tag(:p, raw(contents)), :class => "textarea")
     end
 
     # Format text field question
@@ -258,7 +258,7 @@ module SmerfFormsHelper
           nil
         end, 
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30")
-      contents = content_tag(:div, content_tag(:p, contents), :class => "text")
+      contents = content_tag(:div, content_tag(:p, raw(contents)), :class => "text")
     end
 
     # Format single choice question
@@ -283,7 +283,7 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, content_tag(:p, html), :class => "radiobutton")
+        contents += content_tag(:div, content_tag(:p, raw(html)), :class => "radiobutton")
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end
@@ -318,12 +318,12 @@ module SmerfFormsHelper
         
       # Note the additional [] in the select_tag name, without this we only get 
       # one choice in params, adding the [] gets all choices as an array
-      html = "\n" + select_tag("responses[#{question.code}][]", answers, :multiple => 
+      html = "\n" + select_tag("responses[#{question.code}][]", raw(answers), :multiple => 
         # Check if multiple choice
         (question.selectionbox_multiplechoice and 
         !question.selectionbox_multiplechoice.blank?() and
         question.selectionbox_multiplechoice.upcase == 'Y'))
-      contents += content_tag(:div, content_tag(:p, html), :class => "select")
+      contents += content_tag(:div, content_tag(:p, raw(html)), :class => "select")
       
       return contents
     end
