@@ -1,3 +1,9 @@
+*** IMPORTANT ***
+This branch contains as yet untested Rails3 changes supplied by ferrisoxide (thanks Tom). If you want
+to use SMERF in production use the 1.0-stable branch.
+*****************
+
+
 = Simple MEta Rails Form (SMERF)
 
 SMERF is a Ruby on Rails plugin that allows you to easily define dynamic  
